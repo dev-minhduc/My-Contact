@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head"></head>
+<!-- Giống như PHP nó sẽ include head từ layout.html vì đều có phần chung là head -->
+<body>
+	<nav th:replace="layout :: header"></nav>
+	<!-- Tương tự như phần Head -->
+
+	<h2>Form Content</h2>
+	<div class="container main-content form">
+		<div class="row">
+			<form action="#" th:action="@{/contact/save}" th:object="${contact}"
+				method="POST" novalidate="novalidate"> <!-- th:action chỉ ra đường dẫn xử lí submit form, novalidate để validate form -->
+				<input type="hidden" th:field="*{id}" />
+				<div class="form-group">
+					<label>Name</label> 
+					<input type="text" class="form-control" th:field="*{name}" th:errorclass="field-error" /> <!-- th:field="*{xxx}" tương ứng với trường  -->
+					<em th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></em> <!-- th:if="${#fields.hasErrors('xx')}" hiển thị validation messages nếu field đó invalid -->
+				</div>
+				<div class="form-group">
+					<label>Email</label> 
+					<input type="email" class="form-control" th:field="*{email}" th:errorclass="field-error" /> 
+					<em th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></em>
+				</div>
+				<div class="form-group">
+					<label>Phone</label> 
+					<input type="text" class="form-control" th:field="*{phone}" />
+				</div>
+				<button type="submit" class="btn btn-primary">Save</button>
+			</form>
+		</div>
+	</div>
+	<!-- /.container -->
+
+	<footer th:replace="layout :: footer"></footer>
+	<!-- KHông khác gì head và nav  -->
+</body>
+</html>

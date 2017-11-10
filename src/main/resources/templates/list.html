@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head"></head> <!-- Giống như PHP nó sẽ include head từ layout.html vì đều có phần chung là head -->
+<body>
+    <nav th:replace="layout :: header"></nav> <!-- Tương tự như phần Head -->
+	
+    <h2>List Content</h2>
+
+    <div class="container main-content list">
+    	<!-- Hiển thị flash message -->
+	    <div th:if="${success}" class="row alert alert-success alert-dismissible">
+	        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <span th:text="${success}"></span>
+	    </div>
+    
+        <!-- Nếu list trống nó sẽ trả về No Contacts -->
+	    <th:block th:if="${#lists.isEmpty(contacts)}">
+	        <h3>No contacts</h3>
+	    </th:block>
+	    
+	    <th:block th:unless="${#lists.isEmpty(contacts)}">
+	    
+        <div class="row">
+            <a th:href="@{/contact/create}"  class="btn btn-success pull-left">
+                <span class="glyphicon glyphicon-plus"></span> Add new contact
+            </a>
+            <form class="form-inline pull-right" action="#" th:action="@{/contact/search}" method="GET">
+			    <div class="form-group">
+			        <input type="text" class="form-control" name="q" placeholder="Type contact name..." />
+			    </div>
+			    <button type="submit" class="btn btn-primary">Search</button>
+			</form>
+        </div>
+        <div class="row">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="contact,iterStat : ${contacts}"> <!-- th:each tương ứng câu lệnh foeach, đối tượng contacts truyền từ Controller -->
+                        <td th:text="${iterStat.count}"></td> <!-- iterStat là 1 status variable giúp theo dõi vòng lặp, biến count sẽ lấy ra chỉ số hiện tại của vòng lặp bắt đầu từ 1 -->
+                        <td th:text="${contact.name}"></td> <!-- contact là 1 iteration variable -->
+                        <td th:text="${contact.email}"></td> <!-- th:text tương ứng với đổ dữ liệu dạng text vào HTML -->
+                        <td th:text="${contact.phone}"></td> 
+                        <td><a th:href="@{/contact/{id}/edit(id=${contact.id})}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td><a th:href="@{/contact/{id}/delete(id=${contact.id})}"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    </tr>
+                       
+                </tbody>
+                
+            </table>
+        </div>
+        </th:block>
+    </div>
+    
+    <!-- /.container -->
+
+   <footer th:replace="layout :: footer"></footer> <!-- KHông khác gì head và nav  -->
+</body>
+</html>
